@@ -3,11 +3,15 @@ dotenv.config();
 import express from 'express';
 import mongoose from 'mongoose';
 
+import router from './routes';
+
 const PORT = process.env.PORT || 4444;
 
 const app = express();
 
 app.use(express.json());
+
+router(app);
 
 const start = () => {
   try {
