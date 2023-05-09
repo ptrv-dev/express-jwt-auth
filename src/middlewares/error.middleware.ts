@@ -7,9 +7,6 @@ export const errorMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
-  console.log(err instanceof Error);
-  console.log(err instanceof ApiError);
-
   if (err instanceof ApiError) {
     return res.status(err.status).json({
       message: err.message,
