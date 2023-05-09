@@ -46,3 +46,7 @@ export const validateRefreshToken = (token: string) => {
 export const getTokenFromDB = async (token: string) => {
   return await TokenModel.findOne({ token });
 };
+
+export const removeToken = async (token: string) => {
+  return await TokenModel.findOneAndDelete({ token });
+};
