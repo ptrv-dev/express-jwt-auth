@@ -4,14 +4,15 @@ import express from 'express';
 import mongoose from 'mongoose';
 
 import router from './routes';
+import { errorMiddleware } from './middlewares/error.middleware';
 
 const PORT = process.env.PORT || 4444;
 
 const app = express();
 
 app.use(express.json());
-
-router(app);
+app.use(router);
+app.use(errorMiddleware);
 
 const start = () => {
   try {
