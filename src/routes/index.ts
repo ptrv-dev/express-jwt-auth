@@ -8,5 +8,6 @@ router.post('/auth/registration', UserController.registration);
 router.post('/auth/login', UserController.login);
 router.get('/auth/refresh', UserController.refresh);
 router.get('/auth/get', checkAuthMiddleware, UserController.getMe);
+router.get('/auth/logout', checkAuthMiddleware, UserController.logout);
 
 export default router;
