@@ -66,3 +66,17 @@ export const getMe = async (
     next(error);
   }
 };
+
+export const logout = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    await UserService.logout(req.cookies.refreshToken);
+    res.clearCookie('refreshToken');
+    return res.status(200).json({ success: true });
+  } catch (error) {
+    next(error);
+  }
+};
