@@ -9,6 +9,7 @@ export const registration = async (
   try {
     const { username, email, password } = req.body;
     const response = await UserService.registration(username, email, password);
+    res.cookie('refreshToken', response.refreshToken);
     return res.status(200).json(response);
   } catch (error) {
     next(error);
@@ -23,6 +24,7 @@ export const login = async (
   try {
     const { email, password } = req.body;
     const response = await UserService.login(email, password);
+    res.cookie('refreshToken', response.refreshToken);
     return res.status(200).json(response);
   } catch (error) {
     next(error);
