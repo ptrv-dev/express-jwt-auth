@@ -1,7 +1,8 @@
-import { UserModel } from '../models/user.model';
 import bcrypt from 'bcrypt';
 
+import ApiError from '../exceptions/api.error';
 import * as TokenService from './token.service';
+import { UserModel } from '../models/user.model';
 
 export const registration = async (
   username: string,
@@ -11,7 +12,8 @@ export const registration = async (
   const candidate = await UserModel.findOne({
     $or: [{ username: username }, { email: email }],
   });
-  if (candidate) throw new Error('Username or Email is already taken.');
+  if (candidate)
+    throw ApiError.BadRequest('Username or Email is already taken.');
 
   const passwordHash = bcrypt.hashSync(password, 8);
   const user = await UserModel.create({
@@ -33,10 +35,10 @@ export const registration = async (
 
 export const login = async (email: string, password: string) => {
   const user = await UserModel.findOne({ email });
-  if (!user) throw new Error('Invalid credentials.');
+  if (!user) throw ApiError.BadRequest('Invalid credentials.');
 
   const passwordMatch = bcrypt.compareSync(password, user.password);
-  if (!passwordMatch) throw new Error('Invalid credentials.');
+  if (!passwordMatch) throw ApiError.BadRequest('Invalid credentials.');
 
   const tokens = TokenService.generateTokens({ _id: user._id });
   await TokenService.saveToken(user._id, tokens.refreshToken);
