@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
 import mongoose from 'mongoose';
+import cookieParser from 'cookie-parser';
 
 import router from './routes';
 import { errorMiddleware } from './middlewares/error.middleware';
@@ -11,6 +12,7 @@ const PORT = process.env.PORT || 4444;
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(router);
 app.use(errorMiddleware);
 
