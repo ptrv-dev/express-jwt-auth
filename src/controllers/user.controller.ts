@@ -44,3 +44,16 @@ export const refresh = async (
     next(error);
   }
 };
+
+export const getMe = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const user = await UserService.getUser(req.user._id);
+    return res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+};
