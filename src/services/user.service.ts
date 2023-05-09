@@ -50,3 +50,16 @@ export const login = async (email: string, password: string) => {
     email: user.email,
   };
 };
+
+export const refresh = async (refreshToken: string) => {
+  if (!refreshToken) throw ApiError.Unauthorized();
+
+  const userData = TokenService.validateRefreshToken(refreshToken);
+  const tokenFromDB = TokenService.getTokenFromDB(refreshToken);
+  if (!userData || !tokenFromDB) throw ApiError.Unauthorized();
+
+  const tokens = TokenService.generateTokens({ _id: userData._id });
+  await TokenService.saveToken(userData._id, tokens.refreshToken);
+
+  return tokens;
+};
