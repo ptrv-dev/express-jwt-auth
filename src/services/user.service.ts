@@ -30,3 +30,21 @@ export const registration = async (
     email: user.email,
   };
 };
+
+export const login = async (email: string, password: string) => {
+  const user = await UserModel.findOne({ email });
+  if (!user) throw new Error('Invalid credentials.');
+
+  const passwordMatch = bcrypt.compareSync(password, user.password);
+  if (!passwordMatch) throw new Error('Invalid credentials.');
+
+  const tokens = TokenService.generateTokens({ _id: user._id });
+  await TokenService.saveToken(user._id, tokens.refreshToken);
+
+  return {
+    ...tokens,
+    _id: user._id,
+    username: user.username,
+    email: user.email,
+  };
+};
