@@ -1,6 +1,7 @@
-import jwt from 'jsonwebtoken';
-import { TokenModel } from '../models/token.model';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import { ObjectId } from 'mongodb';
+
+import { TokenModel } from '../models/token.model';
 
 export const generateTokens = (
   payload: String | Object
@@ -21,4 +22,27 @@ export const saveToken = async (userId: string | ObjectId, token: string) => {
     return await tokenData.save();
   }
   return await TokenModel.create({ userId, token });
+};
+
+export const validateAccessToken = (token: string) => {
+  try {
+    return jwt.verify(token, process.env.JWT_ACCESS_SECRET ?? '') as JwtPayload;
+  } catch (error) {
+    return null;
+  }
+};
+
+export const validateRefreshToken = (token: string) => {
+  try {
+    return jwt.verify(
+      token,
+      process.env.JWT_REFRESH_SECRET ?? ''
+    ) as JwtPayload;
+  } catch (error) {
+    return null;
+  }
+};
+
+export const getTokenFromDB = async (token: string) => {
+  return await TokenModel.findOne({ token });
 };
