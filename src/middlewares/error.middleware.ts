@@ -13,5 +13,6 @@ export const errorMiddleware = (
       errors: err.errors,
     });
   }
+  console.log(`Error: Unexpected server error!\n`, err.message);
   return res.status(500).json({ message: 'Unexpected error!', errors: [] });
 };
