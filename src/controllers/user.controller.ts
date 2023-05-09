@@ -30,3 +30,17 @@ export const login = async (
     next(error);
   }
 };
+
+export const refresh = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const tokens = await UserService.refresh(req.cookies.refreshToken);
+    res.cookie('refreshToken', tokens.refreshToken);
+    return res.status(200).json(tokens);
+  } catch (error) {
+    next(error);
+  }
+};
