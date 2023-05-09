@@ -63,3 +63,9 @@ export const refresh = async (refreshToken: string) => {
 
   return tokens;
 };
+
+export const getUser = async (id: string) => {
+  const user = await UserModel.findById(id);
+  if (!user) throw ApiError.NotFound();
+  return user;
+};
