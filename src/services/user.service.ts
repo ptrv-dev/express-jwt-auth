@@ -69,3 +69,9 @@ export const getUser = async (id: string) => {
   if (!user) throw ApiError.NotFound();
   return user;
 };
+
+export const logout = async (refreshToken: string) => {
+  const token = await TokenService.removeToken(refreshToken);
+  if (!token) throw ApiError.NotFound();
+  return true;
+};
